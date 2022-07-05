@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "handsonproject-covid-adf"
+		},
+		"ls_ablob_handsonprojectcovidsa_connectionString": {
+			"value": ""
+		},
+		"ls_abs_ecdc_data_connectionString": {
+			"value": ""
+		},
+		"ls_adls_handsonprojectcoiddl_accountKey": {
+			"value": ""
+		},
+		"ls_adls_handsonprojectcoiddl_properties_typeProperties_url": {
+			"value": "https://handsonprojectcoiddl.dfs.core.windows.net/"
+		},
+		"ls_http_casesanddeath_properties_typeProperties_url": {
+			"value": "@{linkedService().sourceBaseURL}"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
