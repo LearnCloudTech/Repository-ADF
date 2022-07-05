@@ -1,0 +1,9 @@
+{
+	"name": "handsonproject-covid-adf",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1ac37fb8-8402-4e77-8e7d-600a80cf321f",
+		"tenantId": "ddd08788-f63e-4cdc-952f-a50bc6b853ae"
+	}
+}

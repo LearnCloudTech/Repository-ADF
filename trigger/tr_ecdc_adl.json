@@ -1,0 +1,26 @@
+{
+	"name": "tr_ecdc_adl",
+	"properties": {
+		"description": "Read contents from the JSON file in the storage account and copy all the files to the data lake.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_http_ecdc_data",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-06-29T03:55:00",
+				"endTime": "2022-06-30T10:17:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

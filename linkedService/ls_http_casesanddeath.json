@@ -1,0 +1,19 @@
+{
+	"name": "ls_http_casesanddeath",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Linked Service to GitHub to fetch the cases and death file",
+		"parameters": {
+			"sourceBaseURL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "@{linkedService().sourceBaseURL}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

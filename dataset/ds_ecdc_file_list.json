@@ -1,0 +1,33 @@
+{
+	"name": "ds_ecdc_file_list",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_abs_ecdc_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "files.json",
+				"container": "ecdc-data"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"sourceBaseURL": {
+					"type": "string"
+				},
+				"sourceRelativeURL": {
+					"type": "string"
+				},
+				"sinkFile": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
