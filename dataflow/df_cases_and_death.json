@@ -1,0 +1,124 @@
+{
+	"name": "df_cases_and_death",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_df_cases_death",
+						"type": "DatasetReference"
+					},
+					"name": "CasesandDeath"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_df_country_lookup",
+						"type": "DatasetReference"
+					},
+					"name": "CountryLookup"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_df_cases_death_processed",
+						"type": "DatasetReference"
+					},
+					"name": "Export2ADLS"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterEurope"
+				},
+				{
+					"name": "CasesandDeathCount"
+				},
+				{
+					"name": "LookupCountryCode"
+				},
+				{
+					"name": "selectReqColumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as integer,",
+				"          indicator as string,",
+				"          daily_count as integer,",
+				"          date as date,",
+				"          rate_14_day as double,",
+				"          source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> CasesandDeath",
+				"source(output(",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          continent as string,",
+				"          population as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> CountryLookup",
+				"CasesandDeath filter(continent=='Europe',",
+				"     partitionBy('hash', 1)) ~> FilterEurope",
+				"LookupCountryCode pivot(groupBy(CasesandDeath@country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          date,",
+				"          source),",
+				"     pivotBy(indicator, ['confirmed cases', 'deaths']),",
+				"     count = sum(daily_count),",
+				"     columnNaming: '$V_$N',",
+				"     lateral: false,",
+				"     partitionBy('hash', 1)) ~> CasesandDeathCount",
+				"FilterEurope, CountryLookup lookup(CasesandDeath@country == CountryLookup@country,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     partitionBy('hash', 1),",
+				"     broadcast: 'auto')~> LookupCountryCode",
+				"CasesandDeathCount select(mapColumn(",
+				"          country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          reported_date = date,",
+				"          {confirmed cases_count},",
+				"          deaths_count,",
+				"          source",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectReqColumns",
+				"selectReqColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          continent as string,",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          population as string,",
+				"          {reported date} as string,",
+				"          {confirmed cases_count} as string,",
+				"          deaths_count as string,",
+				"          source as string",
+				"     ),",
+				"     partitionFileNames:['cases_deaths_processed.csv'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Export2ADLS"
+			]
+		}
+	}
+}
