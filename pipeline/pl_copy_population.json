@@ -1,5 +1,5 @@
 {
-	"name": "pl_copy_population_tsv",
+	"name": "pl_copy_population",
 	"properties": {
 		"activities": [
 			{
