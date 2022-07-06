@@ -1,0 +1,23 @@
+{
+	"name": "ds_df_hopital_admissions_processed",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_handsonprojectcoiddl",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output/Hospital_Admissions",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
