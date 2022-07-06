@@ -57,6 +57,18 @@
 				},
 				{
 					"name": "Aggregate"
+				},
+				{
+					"name": "Join"
+				},
+				{
+					"name": "GetWeeklyCount"
+				},
+				{
+					"name": "ArrangeData"
+				},
+				{
+					"name": "sort"
 				}
 			],
 			"scriptLines": [
@@ -142,7 +154,41 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ArangeColumns",
 				"ArangeColumns sort(desc(reported_date, true)) ~> SortbyDate",
-				"DimDate aggregate() ~> Aggregate",
+				"DimDate aggregate(groupBy(ecdc_week_year = year+'-W'+lpad(week_of_year, 2, '0')),",
+				"     week_start = min(date),",
+				"          week_end = max(date)) ~> Aggregate",
+				"SplitDailyWeekly@Weekly, Aggregate join(reported_year_week == ecdc_week_year,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> Join",
+				"Join pivot(groupBy(country,",
+				"          country_code_3_digit,",
+				"          country_code_2_digit,",
+				"          population,",
+				"          reported_year_week,",
+				"          week_start,",
+				"          week_end,",
+				"          source),",
+				"     pivotBy(indicator, ['Weekly new hospital admissions per 100k', 'Weekly new ICU admissions per 100k']),",
+				"     count = sum(value),",
+				"     columnNaming: '$V_$N',",
+				"     lateral: true) ~> GetWeeklyCount",
+				"GetWeeklyCount select(mapColumn(",
+				"          country,",
+				"          country_code_3_digit,",
+				"          country_code_2_digit,",
+				"          population,",
+				"          reported_year_week,",
+				"          week_start,",
+				"          week_end,",
+				"          {hospital_admissions/100k_count} = {Weekly new hospital admissions per 100k_count},",
+				"          {ICU_admissions/100k_count} = {Weekly new ICU admissions per 100k_count},",
+				"          source",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> ArrangeData",
+				"ArrangeData sort(desc(reported_year_week, true)) ~> sort",
 				"SortbyDate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['hospital_admissions_processed.csv'],",
