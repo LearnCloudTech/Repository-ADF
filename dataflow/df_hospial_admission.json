@@ -198,7 +198,7 @@
 				"ArrangeData sort(desc(reported_year_week, true)) ~> sort",
 				"SortbyDate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['hospital_admissions_processed.csv'],",
+				"     partitionFileNames:['daily_hospital_admissions_processed.csv'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
