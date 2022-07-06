@@ -27,6 +27,12 @@
 				},
 				{
 					"name": "MatchCountryCodes"
+				},
+				{
+					"name": "SplitDailyWeekly"
+				},
+				{
+					"name": "IcuHospitalCount"
 				}
 			],
 			"scriptLines": [
@@ -69,7 +75,19 @@
 				"HospitalAdmissions, CountryLookup lookup(HospitalAdmissions@country == CountryLookup@country,",
 				"     multiple: false,",
 				"     pickup: 'any',",
-				"     broadcast: 'auto')~> MatchCountryCodes"
+				"     broadcast: 'auto')~> MatchCountryCodes",
+				"UpdateReqColumns split(indicator=='Daily hospital occupancy'||indicator=='Daily ICU occupancy',",
+				"     disjoint: false) ~> SplitDailyWeekly@(Daily, Weekly)",
+				"SplitDailyWeekly@Daily pivot(groupBy(country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          population,",
+				"          reported_date,",
+				"          source),",
+				"     pivotBy(indicator, ['Daily hospital occupancy', 'Daily ICU occupancy']),",
+				"     count = sum(value),",
+				"     columnNaming: '$V_$N',",
+				"     lateral: false) ~> IcuHospitalCount"
 			]
 		}
 	}
