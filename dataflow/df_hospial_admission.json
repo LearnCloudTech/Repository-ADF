@@ -33,7 +33,14 @@
 						"referenceName": "ds_df_hopital_admissions_processed",
 						"type": "DatasetReference"
 					},
-					"name": "Export2ADLS"
+					"name": "ExportDaliy2ADLS"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_df_weekly_hospital_processed",
+						"type": "DatasetReference"
+					},
+					"name": "ExportWeekly2ADLS"
 				}
 			],
 			"transformations": [
@@ -198,7 +205,17 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> Export2ADLS"
+				"     partitionBy('hash', 1)) ~> ExportDaliy2ADLS",
+				"sort sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Weekly_Hospital_admissions.csv'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> ExportWeekly2ADLS"
 			]
 		}
 	}
