@@ -6,7 +6,7 @@
 		"type": "AzureBlobStorage",
 		"typeProperties": {
 			"connectionString": "DefaultEndpointsProtocol=https;AccountName=handsonprojectcovidsa;EndpointSuffix=core.windows.net;",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEFDNEFBMUQ0LUEwNkItNDc4Mi1BMTI3LTA5NTY2MzVEQ0VGM18yMjQ2NDY3MS1kMWJmLTQwNTYtYWQ0ZS00NzgwNWZkZmE5MzAiDQp9"
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEFDNEFBMUQ0LUEwNkItNDc4Mi1BMTI3LTA5NTY2MzVEQ0VGM18yYmQ5M2E4NC0zOTQ1LTQwODYtYTNhZS02YzQ1OGNjYmM5NzciDQp9"
 		}
 	}
 }
